@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
         setFragment(mAddAnEvent);
     }
 
-    public void editEventFragment(RecyclerView.ViewHolder holder) {
+    public void editEventFragment() {
         currentFragment = FRAGMENT_EDIT_EVENT;
         if (mEditEvent == null)
-            mEditEvent = mEditEvent.newInstance(holder);
+            mEditEvent = mEditEvent.newInstance();
         setFragment(mEditEvent);
     }
     void setFragment(Fragment fragment) {

@@ -110,7 +110,7 @@ public class SilenceItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     Toast.makeText(v.getContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.edit:
-                    ((MainActivity)v.getContext()).editEventFragment(this);
+                    ((MainActivity)v.getContext()).editEventFragment();
                     Toast.makeText(v.getContext(), "Item has been changed", Toast.LENGTH_SHORT).show();
                     break;
                 default:

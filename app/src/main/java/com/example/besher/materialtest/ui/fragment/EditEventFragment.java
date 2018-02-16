@@ -20,10 +20,9 @@ public class EditEventFragment extends Fragment {
 
     private TextView mEditTitle;
 
-    public static EditEventFragment newInstance(RecyclerView.ViewHolder holder) {
+    public static EditEventFragment newInstance() {
 
         Bundle args = new Bundle();
-        args.putSerializable("key", (Serializable) holder);
         EditEventFragment fragment = new EditEventFragment();
         fragment.setArguments(args);
         return fragment;
@@ -38,9 +37,6 @@ public class EditEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        RecyclerView.ViewHolder r;
-        Bundle args = new Bundle();
-        r = (RecyclerView.ViewHolder) args.getSerializable("key");
 
         View v = inflater.inflate(R.layout.fragment_edit_event, container, false);
 

@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.besher.materialtest.R;
+import com.example.besher.materialtest.models.SilenceItem;
 import com.example.besher.materialtest.ui.activity.MainActivity;
 
 /**
@@ -21,6 +22,7 @@ import com.example.besher.materialtest.ui.activity.MainActivity;
 public class MapFramgent extends Fragment implements View.OnClickListener {
 
     FloatingActionButton btnNewEventTrial;
+    private SilenceItem silenceItem = null;
 
     public MapFramgent() {
         // Required empty public constructor
@@ -68,6 +70,6 @@ public class MapFramgent extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ((MainActivity)getActivity()).addNewEvent();
+        ((MainActivity)getActivity()).addNewEvent(silenceItem);
     }
 }

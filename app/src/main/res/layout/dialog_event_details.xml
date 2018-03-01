@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:drawableStart="@drawable/ic_action_access_time"
+        android:id="@+id/timeDetails"
+        android:layout_below="@+id/app_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+
+
+    <TextView
+        android:id="@+id/startTimeDetailsValue"
+        android:layout_below="@+id/app_bar"
+        android:layout_toEndOf="@+id/timeDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        />
+
+
+
+    <TextView
+        android:id="@+id/endTimeDetailsValue"
+        android:layout_below="@+id/app_bar"
+        android:layout_toEndOf="@+id/startTimeDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        />
+
+    <TextView
+        android:drawableStart="@drawable/ic_action_today"
+        android:id="@+id/daysDetailsLabel"
+        android:layout_below="@+id/timeDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/daysDetailsList"
+        android:layout_below="@+id/timeDetails"
+        android:layout_toEndOf="@id/daysDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        />
+
+</RelativeLayout>

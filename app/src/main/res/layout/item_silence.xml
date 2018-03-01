@@ -13,36 +13,49 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:textSize="40sp"
+        android:textSize="25sp"
         android:layout_marginStart="24dp"
-        android:id="@+id/startTime" />
+        android:id="@+id/title" />
 
     <TextView
         android:id="@+id/AmPm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_below="@id/title"
         android:layout_toEndOf="@+id/startTime"
         android:textSize="15sp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="43dp"
-        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+
         />
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/startTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/startTime"
+        android:layout_below="@+id/title"
         android:layout_marginStart="26dp"
         android:textSize="15sp"
-        android:textColor="#212121"/>
+       />
+    <!--
+     android:textColor="#212121"
     <TextView
+
         android:id="@+id/selectedDays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/startTime"
         android:layout_toEndOf="@+id/title"
         android:textSize="15sp"/>
+-->
+    <Switch
+        android:id="@+id/cancelAlarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:checked="true"
+        />
+    <!--
     <Button
         android:id="@+id/edit"
         android:layout_width="40dp"
@@ -67,7 +80,7 @@
         android:background="@drawable/deletebutton"
         android:paddingLeft="9dp"
         android:layout_marginTop="2dp"
-        />
+        /> -->
 
     <View
         android:layout_width="350dp"
@@ -75,7 +88,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="8dp"
-        android:layout_below="@+id/title"
+        android:layout_below="@+id/startTime"
         android:background="#e5e5e5"/>
 
 </RelativeLayout>

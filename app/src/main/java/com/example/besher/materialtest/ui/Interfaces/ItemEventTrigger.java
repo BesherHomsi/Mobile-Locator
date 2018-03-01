@@ -29,8 +29,24 @@ public class ItemEventTrigger {
         }
     }
 
+    public static void notifyListenerOnUpdate(SilenceItem silenceItem) {
+        for(ItemEvent ls : listeners) {
+            ls.onUpdateItem(silenceItem);
+        }
+    }
+
+    public static void notifyListenerOnDelete(SilenceItem silenceItem) {
+        for (ItemEvent ls:
+             listeners) {
+            ls.onDeleteItem(silenceItem);
+
+        }
+    }
+
     public interface ItemEvent {
         void onNewItem(SilenceItem silenceItem);
+        void onUpdateItem(SilenceItem silenceItem);
+        void onDeleteItem(SilenceItem silenceItem);
     }
 
 }

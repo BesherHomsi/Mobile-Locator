@@ -33,10 +33,11 @@ public class ErorrHandler {
         return false;
     }
 
-    public static boolean startHourGreater(int startHour, int endHour) {
+    public static boolean startHourGreater(int startHour, int endHour, String startAmPm, String endAmPm) {
 
-        if(startHour > endHour)
-            return true;
+        if(startAmPm.equals(endAmPm))
+            if(startHour > endHour)
+                return true;
         return false;
     }
 }

@@ -267,12 +267,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
                         break;
                 }
                 break;
-            case R.id.et_setStartDate:
-                setStartDate();
-                break;
-            case R.id.et_setEndDate:
-                setEndDate();
-                break;
             case R.id.startTime:
                 setStartTime();
                 break;
@@ -320,7 +314,8 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         final HashMap<Integer, String> daysMap = Days.getDays();
         AlertDialog.Builder builder = new AlertDialog.Builder((MainActivity) getActivity());
         builder.setTitle("Days");
-        builder.setMultiChoiceItems(R.array.days, checkedList, new DialogInterface.OnMultiChoiceClickListener() {
+        builder.setMultiChoiceItems(R.array.days, checkedList,
+                new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                 if (isChecked) {
@@ -501,8 +496,8 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
             daysWrapper.setErrorEnabled(false);
         }
 
-        if(ErorrHandler.startHourGreater(this.startHour, this.endHour)) {
-            startTimeWrapper.setError("Start Time is required");
+        if(ErorrHandler.startHourGreater(this.startHour, this.endHour, this.start_AM_PM, this.end_AM_PM)) {
+            startTimeWrapper.setError("Start time is less than end tine");
             return false;
         }else {
             daysWrapper.setErrorEnabled(false);

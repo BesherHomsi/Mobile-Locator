@@ -1,18 +1,20 @@
 package com.example.besher.materialtest.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.nsd.NsdManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.example.besher.materialtest.R;
 import com.example.besher.materialtest.models.SilenceItem;
+import com.example.besher.materialtest.ui.Dialog.DisplayContactDialog;
 import com.example.besher.materialtest.ui.fragment.AddEventFragment;
-import com.example.besher.materialtest.ui.fragment.EditEventFragment;
-import com.example.besher.materialtest.ui.fragment.EventDetailsFragment;
 import com.example.besher.materialtest.ui.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 
     private MainFragment mMainFragment;
     private AddEventFragment mAddAnEvent;
-    private EventDetailsFragment mEventDetailsFragment;
 
     private int currentFragment = FRAGMENT_MAIN;
 
@@ -35,6 +36,29 @@ public class MainActivity extends AppCompatActivity {
 
         pagerFragment();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu:
+                 DisplayContactDialog daysDialog = DisplayContactDialog.newInstance();
+                daysDialog.show(getFragmentManager(),"any");
+                break;
+            case R.id.menu1:
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void pagerFragment() {
@@ -58,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void editEventFragment(SilenceItem silenceItem) {
         currentFragment = FRAGMENT_EDIT_EVENT;
-        setFragment(EditEventFragment.newInstance(silenceItem));
+        //setFragment(new ContactsFragment());
     }
 
     public void eventDetails(SilenceItem silenceItem) {
         currentFragment = FRAGMENT_EVENT_DETAILS;
-        setFragment(EventDetailsFragment.newInstance(silenceItem));
+        //setFragment(new ContactsFragment());
     }
 
     void setFragment(Fragment fragment) {

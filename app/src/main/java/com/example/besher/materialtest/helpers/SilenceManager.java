@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.models.Days;
@@ -68,6 +69,7 @@ public class SilenceManager {
 //        cal.set(Calendar.DATE, cur_cal.get(Calendar.DATE));
 //        cal.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
 
+
         Calendar startDate = Calendar.getInstance();
         Calendar myCalender = Calendar.getInstance();
 
@@ -99,7 +101,7 @@ public class SilenceManager {
         intent.setAction(ACTION_SET_SILENCE);
         //intent.putExtra("item",silenceItem);
         PendingIntent pIntent = PendingIntent.getBroadcast(context,
-                id, intent, 0);// getService(ProfileList.this, 0, intent, 0);
+                id, intent, 0);
 
         AlarmManager alarm = (AlarmManager) context
                 .getSystemService(context.ALARM_SERVICE);

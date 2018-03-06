@@ -25,7 +25,6 @@ import java.util.Calendar;
  */
 public class EventDetailsDialog extends DialogFragment {
 
-    private Toolbar mToolBar;
     //private TextView mStartDate;
     //private TextView mEndDate;
     private TextView mStartTime;
@@ -74,7 +73,7 @@ public class EventDetailsDialog extends DialogFragment {
         return dialog;
     }
     public void setUpView(View v){
-        mToolBar = (Toolbar) v.findViewById(R.id.tool_bar_display_details);
+
         //mStartDate = (TextView) v.findViewById(R.id.startDateDetailsValue);
         //mEndDate = (TextView) v.findViewById(R.id.endDateDetailsValue);
         mStartTime = (TextView) v.findViewById(R.id.startTimeDetailsValue);

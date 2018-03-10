@@ -81,11 +81,10 @@ public class MainFragment extends Fragment {
 
         adapter.addFragment(eventFragment, "Events");
         adapter.addFragment(mapFragment, "Locations");
-        //adapter.addFragment(contactListFragment, "Contacts");
+        adapter.addFragment(contactListFragment, "Contacts");
         mVpViewPager.setAdapter(adapter);
         mVpViewPager.setOffscreenPageLimit(3);
     }
-
 
     public void addNewItem(SilenceItem silenceItem) {
         if (eventFragment != null) {

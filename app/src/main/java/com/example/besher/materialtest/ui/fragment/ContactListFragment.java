@@ -40,7 +40,6 @@ public class ContactListFragment extends Fragment {
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private ArrayList<MyContact> myContactsList = new ArrayList<>();
     private ArrayList<MyContact> mySavedContactsList = new ArrayList<>();
-    private Boolean flag = false;
 
     private DisplayContactsAdapter displayContactsAdapter;
     private RecyclerView rv_contactList;
@@ -63,10 +62,7 @@ public class ContactListFragment extends Fragment {
                 checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-            flag = false;
         }
-        else
-            flag = true;//retrieveContacts();
 
     }
 
@@ -82,6 +78,8 @@ public class ContactListFragment extends Fragment {
             displayContactsAdapter = new DisplayContactsAdapter(myContactsList, ContactListFragment.this);
             rv_contactList.setAdapter(displayContactsAdapter);
             displayContactsAdapter.setData(myContactsList);
+            getContactBackground();
+
         }
         return root;
     }
@@ -92,29 +90,29 @@ public class ContactListFragment extends Fragment {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                myContactsList.clear();
             }
 
             @Override
             protected Object doInBackground(Object[] params) {
+                retrieveContacts();
                 return null;
             }
 
             @Override
             protected void onPostExecute(Object o) {
-
                 displayContactsAdapter.setData(myContactsList);
                 super.onPostExecute(o);
             }
         };
+        getContactTask.execute();
     }
 
     public void setUpView(View v) {
 
         rv_contactList = (RecyclerView) v.findViewById(R.id.rv_myContacts);
         rv_contactList.setLayoutManager(new LinearLayoutManager(getContext()));
-        //getContactBackground();
-        if(flag)
-            retrieveContacts();
+
     }
 
 
@@ -150,7 +148,6 @@ public class ContactListFragment extends Fragment {
                         status = "on";
                 }
                 myContactsList.add(new MyContact(Uid,name,s,status));
-                s="";
             }
         }
         //MyContactManager.saveListToPref(getActivity(), myContactsList);
@@ -170,7 +167,7 @@ public class ContactListFragment extends Fragment {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_READ_CONTACTS:
                 if (Utility.permissionsGranted(grantResults)) {
-                    retrieveContacts();
+                    getContactBackground();
                 }
                 break;
         }

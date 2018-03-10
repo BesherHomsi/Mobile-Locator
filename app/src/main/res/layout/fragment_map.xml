@@ -5,17 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_new_event_trial"
+    <Button
+        android:id="@+id/addLocation"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-        android:src="@drawable/ic_action_add"
-        android:text="Add Location"/>
-
+        android:text="Add"
+        android:textColor="@color/white"
+        android:background="@drawable/deletebutton"/>
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -25,7 +24,22 @@
         android:apiKey="AIzaSyAmFa4HPV4MpDpn9ELt8zhpMypTQdpxM_g">
 
     </com.google.android.gms.maps.MapView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:gravity="top">
 
+        <EditText
+            android:id="@+id/search_bar"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="50dp"
+            android:hint="Search"
+            android:drawableRight="@drawable/ic_action_search"
+            />
+    </RelativeLayout>
 
 
 </RelativeLayout>

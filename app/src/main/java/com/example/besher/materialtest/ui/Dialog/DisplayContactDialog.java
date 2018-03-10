@@ -9,6 +9,8 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,16 +26,21 @@ import com.example.besher.materialtest.ui.activity.MainActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DisplayContactDialog extends DialogFragment {
 
+
+
+
     private List<String> phoneNumber = new ArrayList<String>();
     private List<String> contactName = new ArrayList<String>();
     private String[] namesStrings;
     private HashMap<String,List<String>> contact = new HashMap<>();
+
 
 
     private boolean[] checkedList;
@@ -51,6 +58,7 @@ public class DisplayContactDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ControllerApplication.getInstance().
                 checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -128,10 +136,8 @@ public class DisplayContactDialog extends DialogFragment {
                 }
                 if(this.phoneNumber != null)
                     this.contact.put(name,this.phoneNumber);
-                Log.v("asdf","asdf");
             }
         }
-        Log.v("asdf","asdf");
     }
 
     public void getSelectedName() {
@@ -140,7 +146,6 @@ public class DisplayContactDialog extends DialogFragment {
                 selectedNames) {
             if(contact.containsKey(s)) {
                 results = results + contact.get(s).toArray().toString();
-                Log.v("asdf","asdf");
             }
         }
 

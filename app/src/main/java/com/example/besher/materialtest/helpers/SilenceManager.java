@@ -5,10 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.location.Location;
+import android.os.Bundle;
 
-import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.models.Days;
+import com.example.besher.materialtest.models.MyCLocation;
 import com.example.besher.materialtest.models.SilenceItem;
 import com.example.besher.materialtest.receiver.SilenceTask;
 
@@ -45,6 +46,10 @@ public class SilenceManager {
     public final static String KEY_END_AM_PM = "end_am_pm";
     public final static String KEY_STATUS = "status";
     public final static String KEY_ALARM_IDS = "alarm_ids";
+    public final static String KEY_LNG = "lng";
+    public final static String KEY_LAT = "lat";
+    public final static String KEY_LOCATION_STATUS = "location_status";
+
 
     public final static String ACTION_SET_SILENCE = "set_silence";
     public final static String ACTION_REMOVE_SILENCE = "remove_silence";
@@ -54,7 +59,7 @@ public class SilenceManager {
     //public final static String KEY_PENDING_ID = "PENDING_id";
 
 
-    public static void scheduleAlarm(Context context,SilenceItem silenceItem, int dayOfWeek) {
+    public static void scheduleAlarm(Context context, SilenceItem silenceItem, int dayOfWeek) {
 
 
 //        Calendar cur_cal = new GregorianCalendar();
@@ -83,8 +88,8 @@ public class SilenceManager {
 
         temp.setTimeInMillis(System.currentTimeMillis());
 
-        if(myCalender.getTimeInMillis() < temp.getTimeInMillis()) {
-            myCalender.add(Calendar.DAY_OF_YEAR, new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
+        if (myCalender.getTimeInMillis() < temp.getTimeInMillis()) {
+            myCalender.add(Calendar.DAY_OF_YEAR, new GregorianCalendar().get(Calendar.DAY_OF_WEEK) - 1);
         }
 /*
         myCalender.set(
@@ -97,9 +102,11 @@ public class SilenceManager {
         int id = getNewID(context);
         silenceItem.addNewAlarmID(String.valueOf(id));
         //set
+        Bundle bundle = new Bundle();
+        bundle.putString("item", silenceItem.getLocationStatus() + ":" + silenceItem.getLat() + ":" + silenceItem.getLng());
         Intent intent = new Intent(context, SilenceTask.class);
         intent.setAction(ACTION_SET_SILENCE);
-        //intent.putExtra("item",silenceItem);
+        intent.putExtras(bundle);
         PendingIntent pIntent = PendingIntent.getBroadcast(context,
                 id, intent, 0);
 
@@ -124,15 +131,16 @@ public class SilenceManager {
         removeCalender.set(Calendar.HOUR_OF_DAY, silenceItem.getEndHour());
         removeCalender.set(Calendar.MINUTE, silenceItem.getEndMin());
 
-        if(removeCalender.getTimeInMillis() < System.currentTimeMillis()) {
-            removeCalender.add(Calendar.DAY_OF_YEAR, new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
+        if (removeCalender.getTimeInMillis() < System.currentTimeMillis()) {
+            removeCalender.add(Calendar.DAY_OF_YEAR, new GregorianCalendar().get(Calendar.DAY_OF_WEEK) - 1);
         }
-
+        Bundle bundle1 = new Bundle();
+        bundle.putString("item", silenceItem.getLocationStatus() + ":" + silenceItem.getLat() + ":" + silenceItem.getLng());
         id = getNewID(context);
-
         silenceItem.addNewAlarmID(String.valueOf(id));
         Intent intentRemove = new Intent(context, SilenceTask.class);
         intentRemove.setAction(ACTION_REMOVE_SILENCE);
+        intentRemove.putExtras(bundle1);
         PendingIntent pIntentRemove = PendingIntent.getBroadcast(context,
                 id, intentRemove, 0);
 
@@ -140,14 +148,12 @@ public class SilenceManager {
                 .getSystemService(context.ALARM_SERVICE);
 
         alarmRemove.setRepeating(AlarmManager.RTC_WAKEUP, removeCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntentRemove);
-
-
     }
 
     public static void cancelAlarm(Context context, SilenceItem silenceItem) {
         String s = ACTION_SET_SILENCE;
-        for (String alarmId:
-             silenceItem.getAlarmIDs()) {
+        for (String alarmId :
+                silenceItem.getAlarmIDs()) {
             Intent myIntent = new Intent(context, SilenceTask.class);
             myIntent.setAction(s);
             try {
@@ -159,15 +165,16 @@ public class SilenceManager {
                         .getSystemService(context.ALARM_SERVICE);
                 alarmManager.cancel(pendingIntent);
 
-            }catch (NumberFormatException e){}
-            if(s.equals(ACTION_SET_SILENCE))
+            } catch (NumberFormatException e) {
+            }
+            if (s.equals(ACTION_SET_SILENCE))
                 s = ACTION_REMOVE_SILENCE;
             else
                 s = ACTION_SET_SILENCE;
         }
 
         silenceItem.setStatus("off");
-        updateListPref(context,silenceItem);
+        updateListPref(context, silenceItem);
     }
 
     public static void registerEvent(Context context, SilenceItem silenceItem) {
@@ -203,6 +210,31 @@ public class SilenceManager {
         updateListPref(context, silenceItem);
     }
 
+    public static boolean checkIfEventISActiveWithLocation(Context context) {
+        Calendar now = Calendar.getInstance();
+        int currentHour = now.get(Calendar.HOUR_OF_DAY);
+        ArrayList<SilenceItem> events = SilenceManager.getListFromPref(context);
+        MyCLocation myCLocation = MyLocationManager.getLocationViaTower(context);
+        boolean found = false;
+        if (myCLocation != null) {
+            for (int i = 0; i < events.size(); i++) {
+                SilenceItem event = events.get(i);
+                if (event.getLocationStatus().equals("on") && event.isSet() &&
+                        (event.getStartHour() <= currentHour) && (event.getEndHour() >= currentHour)) {
+                    float[] distance = new float[2];
+                    Location.distanceBetween(myCLocation.getLat(), myCLocation.getLng(), events.get(i).getLat(), events.get(i).getLng(), distance);
+                    if (distance[0] <= Constant.RADUIES) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return found;
+
+    }
+
     private static JSONObject itemToJsonObject(SilenceItem silenceItem) {
         JSONObject object = new JSONObject();
         try {
@@ -219,7 +251,9 @@ public class SilenceManager {
             object.put(KEY_END_AM_PM, silenceItem.getEnd_AM_PM());
             object.put(KEY_ALARM_IDS, String.valueOf(silenceItem.alarmIdToString()));
             object.put(KEY_STATUS, silenceItem.getStatus());
-
+            object.put(KEY_LNG, String.valueOf(silenceItem.getLng()));
+            object.put(KEY_LAT, String.valueOf(silenceItem.getLat()));
+            object.put(KEY_LOCATION_STATUS, silenceItem.getLocationStatus());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -241,6 +275,10 @@ public class SilenceManager {
         String end_am_pm = "";
         ArrayList<String> alarmIDS = new ArrayList<>();
         String status = "";
+        Double lng = 0.0;
+        Double lat = 0.0;
+        String locationStatus = "";
+
 
         try {
             id = object.getString(KEY_ID);
@@ -289,7 +327,7 @@ public class SilenceManager {
         }
         try {
             String[] alarmIDs = object.getString(KEY_ALARM_IDS).split(",");
-            for (String alarmId:
+            for (String alarmId :
                     alarmIDs) {
                 alarmIDS.add(alarmId);
             }
@@ -300,8 +338,21 @@ public class SilenceManager {
         } catch (JSONException e) {
         }
 
+        try {
+            lng = object.getDouble(KEY_LNG);
+        } catch (JSONException e) {
+        }
+
+        try {
+            lat = object.getDouble(KEY_LAT);
+        } catch (JSONException e) {
+        }
+        try {
+            locationStatus = object.getString(KEY_LOCATION_STATUS);
+        } catch (JSONException e) {
+        }
         return new SilenceItem(id, title, selectedDays, startDate, endDate, startHour, startMin,
-                start_am_pm, endHour, endMin, end_am_pm, alarmIDS,status);
+                start_am_pm, endHour, endMin, end_am_pm, alarmIDS, status, lat, lng, locationStatus);
     }
 
     public static void saveListToPref(Context context, ArrayList<SilenceItem> list) {

@@ -2,6 +2,7 @@ package com.example.besher.materialtest;
 
 import android.app.Application;
 
+import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.services.MapTask;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -24,8 +25,8 @@ public class ControllerApplication extends Application {
         if (code == ConnectionResult.SUCCESS) {
             PeriodicTask task = new PeriodicTask.Builder()
                     .setService(MapTask.class)
-                    .setTag("test")
-                    .setPeriod(30L)
+                    .setTag(Constant.CHECK_LOCATION_TASK)
+                    .setPeriod(900L)
                     .setFlex(5L)
                     .setPersisted(true)
                     .setUpdateCurrent(true)

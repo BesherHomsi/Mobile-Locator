@@ -121,6 +121,26 @@
                 />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/locationWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="20dp"
+                android:layout_below="@+id/daysWrapper">
+                <EditText
+                    android:textIsSelectable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="true"
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Location?"
+                    android:clickable="true"
+                    android:layout_marginTop="20dp"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
             <Button
                 android:id="@+id/btn_AddEvent"
                 android:layout_width="200dp"
@@ -128,7 +148,7 @@
                 android:background="@drawable/mybutton"
                 android:layout_marginTop="40dp"
                 android:textColor="@color/white"
-                android:layout_below="@+id/daysWrapper"
+                android:layout_below="@+id/locationWrapper"
                 android:layout_centerHorizontal="true"  />
 
         </RelativeLayout>

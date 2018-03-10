@@ -30,6 +30,8 @@ public class EventDetailsDialog extends DialogFragment {
     private TextView mStartTime;
     private TextView mEndTime;
     private TextView mDays;
+    private TextView mLocation;
+    private TextView mLocation1;
     private SilenceItem silenceItem;
 
     public static EventDetailsDialog newInstance(SilenceItem silenceItem) {
@@ -40,7 +42,6 @@ public class EventDetailsDialog extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -54,10 +55,11 @@ public class EventDetailsDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder((MainActivity)getActivity());
         builder.setTitle(silenceItem.getTitle());
         builder.setView(v);
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ItemEventTrigger.notifyListenerOnDelete(silenceItem);
+                //ItemEventTrigger.notifyListenerOnDelete(silenceItem);
+                ((MainActivity) getContext()).addNewEvent(silenceItem);
             }
         });
 
@@ -74,30 +76,14 @@ public class EventDetailsDialog extends DialogFragment {
     }
     public void setUpView(View v){
 
-        //mStartDate = (TextView) v.findViewById(R.id.startDateDetailsValue);
-        //mEndDate = (TextView) v.findViewById(R.id.endDateDetailsValue);
         mStartTime = (TextView) v.findViewById(R.id.startTimeDetailsValue);
         mEndTime = (TextView) v.findViewById(R.id.endTimeDetailsValue);
         mDays = (TextView) v.findViewById(R.id.daysDetailsList);
+        mLocation = (TextView) v.findViewById(R.id.locationDetails);
+        mLocation1 = (TextView) v.findViewById(R.id.locationDetails1);
     }
 
     public void displayDetails() {
-
-        Calendar startDate = Calendar.getInstance();
-        Calendar endDate = Calendar.getInstance();
-        SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
-        String formatted;
-
-        // Output "2012-09-26"
-        startDate.setTimeInMillis(this.silenceItem.getStartDate());
-        formatted = format1.format(startDate.getTime());
-        //mStartDate.setText(formatted);
-
-        // Output "2012-09-26"
-        endDate.setTimeInMillis(this.silenceItem.getEndDate());
-        formatted = format1.format(startDate.getTime());
-        //mEndDate.setText(formatted);
-
 
 
         mStartTime.setText(setTime(this.silenceItem.getStartHour(),this.silenceItem.getStartMin(),
@@ -108,6 +94,9 @@ public class EventDetailsDialog extends DialogFragment {
 
         mDays.setText(this.silenceItem.getSelectedDays());
 
+        mLocation.setText(String.valueOf(this.silenceItem.getLat()));
+
+        mLocation1.setText(String.valueOf(this.silenceItem.getLat()));
     }
 
     public String setTime(int hour,int min,String AM_PM) {

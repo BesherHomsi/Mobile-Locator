@@ -5,38 +5,29 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.besher.materialtest.R;
 import com.example.besher.materialtest.helpers.ErorrHandler;
-import com.example.besher.materialtest.helpers.SilenceManager;
 import com.example.besher.materialtest.models.Days;
+import com.example.besher.materialtest.models.MyCLocation;
 import com.example.besher.materialtest.models.SilenceItem;
 import com.example.besher.materialtest.ui.Interfaces.ItemEventTrigger;
 import com.example.besher.materialtest.ui.activity.MainActivity;
-import com.example.besher.materialtest.ui.adapters.SilenceItemsAdapter;
-
-import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -44,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +45,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private EditText mbtn_days;
     private EditText mStartTime;
     private EditText mEndTime;
+    private EditText mLocation;
     private Button mbtn_addEvent;
     //private TextView mtv_displayDays;
     //private TextView mSetStartDate;
@@ -76,6 +67,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private TextInputLayout daysWrapper;
 
 
+
     //Calendar Now = Calendar.getInstance();
     Calendar startDate = Calendar.getInstance();
     Calendar endDate = Calendar.getInstance();
@@ -91,6 +83,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private int endMin = 0;
     private String end_AM_PM = "";
     String daysString = "";
+    private MyCLocation eventLocation;
 
 
     public static AddEventFragment newInstance() {
@@ -151,6 +144,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         //mSetEndDate.setOnClickListener(this);
         mbtn_days.setOnClickListener(this);
         mbtn_addEvent.setOnClickListener(this);
+        mLocation.setOnClickListener(this);
 
         return v;
     }
@@ -158,10 +152,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        mTitle.setText("");
-        //mSetStartDate.setText("");
-        //mSetEndDate.setText("");
-        mbtn_days.setText("");
     }
 
     public void setUpView(View view) {
@@ -174,6 +164,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         //mTimePicker = (TimePicker) view.findViewById(R.id.timePicker);
         mStartTime = (EditText) view.findViewById(R.id.startTime);
         mEndTime = (EditText) view.findViewById(R.id.endTime);
+        mLocation = (EditText) view.findViewById(R.id.location);
 
         //mStartTimeLine = (View) view.findViewById(R.id.lineStartTime);
         //mErorrTitle = (TextView) view.findViewById(R.id.error_title);
@@ -273,6 +264,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
             case R.id.endTime:
                 setEndTime();
                 break;
+            case R.id.location:
+                getLocation();
+                break;
             default:
                 break;
         }
@@ -281,9 +275,22 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     public void addItem(String title) {
         String id = UUID.randomUUID().toString();
         String status = "on";
-        ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
-                startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
-                start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS,status));
+        if(eventLocation != null) {
+            ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
+                    startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
+                    start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
+                    eventLocation.getLat(), eventLocation.getLng(), "on"));
+
+        }
+        else {
+            ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
+                    startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
+                    start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
+                    0.0, 0.0, "off"));
+        }
+
+        //method()
+
         getActivity().onBackPressed();
     }
 
@@ -465,6 +472,11 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    private void getLocation() {
+        ((MainActivity) getContext()).addLocationToEvent();
+    }
+
+
     public boolean isInputValid() {
 
 
@@ -506,4 +518,12 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         return true;
     }
 
+    public void setEventLocation(MyCLocation eventLocation) {
+
+        this.eventLocation = eventLocation;
+        //String s = "Location has been added";
+        //mLocation.setText(s);
+
+
+    }
 }

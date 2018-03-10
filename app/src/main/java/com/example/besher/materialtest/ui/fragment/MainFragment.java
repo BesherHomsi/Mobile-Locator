@@ -25,7 +25,8 @@ public class MainFragment extends Fragment {
     private Toolbar mToolBar;
     private TabLayout mTablayout;
     private SilenceItemsListFragment eventFragment;
-    private MapFramgent mapFragment;
+    private MapFragment mapFragment;
+    private ContactListFragment contactListFragment;
 
     public MainFragment() {
         // Required empty public constructor
@@ -74,9 +75,13 @@ public class MainFragment extends Fragment {
         if (eventFragment == null)
             eventFragment = new SilenceItemsListFragment();
         if (mapFragment == null)
-            mapFragment = new MapFramgent();
+            mapFragment = new MapFragment();
+        if (contactListFragment == null)
+            contactListFragment = new ContactListFragment();
+
         adapter.addFragment(eventFragment, "Events");
         adapter.addFragment(mapFragment, "Locations");
+        //adapter.addFragment(contactListFragment, "Contacts");
         mVpViewPager.setAdapter(adapter);
         mVpViewPager.setOffscreenPageLimit(3);
     }

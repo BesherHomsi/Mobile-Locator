@@ -116,7 +116,8 @@ public class SilenceItemsListFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onUpdateItem(SilenceItem silenceItem) {
-
+        SilenceManager.cancelAlarm(getActivity(), silenceItem);
+        SilenceManager.registerEvent(getActivity(), silenceItem);
         SilenceManager.updateListPref(ControllerApplication.getInstance(),silenceItem);
         for (int i = 0; i < mSilenceItemList.size(); i++) {
             if (mSilenceItemList.get(i).getId() == silenceItem.getId()   ) {

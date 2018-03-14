@@ -12,20 +12,22 @@
     tools:context="com.example.besher.materialtest.ui.activity.SplashActivity">
 
     <ImageView
+        android:id="@+id/splashIcon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/magnifying"
         android:layout_marginTop="200dp"
-        android:gravity="center"
-        />
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/app_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+
         android:gravity="center"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Welcome to Mobile Locater "/>
+        android:text="Welcome to Mobile Locater "
+        android:layout_below="@+id/splashIcon"
+        />
 </RelativeLayout>

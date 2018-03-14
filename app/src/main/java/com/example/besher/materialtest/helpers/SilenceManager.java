@@ -65,14 +65,14 @@ public class SilenceManager {
 //        Calendar cur_cal = new GregorianCalendar();
 //        cur_cal.setTimeInMillis(System.currentTimeMillis());//set the current time and date for this calendar
 //
-//        Calendar cal = new GregorianCalendar();
-//        cal.add(Calendar.DAY_OF_YEAR, cur_cal.get(Calendar.DAY_OF_YEAR));
-//        cal.set(Calendar.HOUR_OF_DAY, 21);
-//        cal.set(Calendar.MINUTE, 40);
-//        cal.set(Calendar.SECOND, cur_cal.get(Calendar.SECOND));
-//        cal.set(Calendar.MILLISECOND, cur_cal.get(Calendar.MILLISECOND));
-//        cal.set(Calendar.DATE, cur_cal.get(Calendar.DATE));
-//        cal.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
+//        Calendar deletebutton = new GregorianCalendar();
+//        deletebutton.add(Calendar.DAY_OF_YEAR, cur_cal.get(Calendar.DAY_OF_YEAR));
+//        deletebutton.set(Calendar.HOUR_OF_DAY, 21);
+//        deletebutton.set(Calendar.MINUTE, 40);
+//        deletebutton.set(Calendar.SECOND, cur_cal.get(Calendar.SECOND));
+//        deletebutton.set(Calendar.MILLISECOND, cur_cal.get(Calendar.MILLISECOND));
+//        deletebutton.set(Calendar.DATE, cur_cal.get(Calendar.DATE));
+//        deletebutton.set(Calendar.MONTH, cur_cal.get(Calendar.MONTH));
 
 
         Calendar startDate = Calendar.getInstance();
@@ -211,6 +211,7 @@ public class SilenceManager {
     }
 
     public static boolean checkIfEventISActiveWithLocation(Context context) {
+
         Calendar now = Calendar.getInstance();
         int currentHour = now.get(Calendar.HOUR_OF_DAY);
         ArrayList<SilenceItem> events = SilenceManager.getListFromPref(context);

@@ -26,6 +26,7 @@ import android.widget.EditText;
 
 import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.R;
+import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.helpers.MyLocationManager;
 import com.example.besher.materialtest.helpers.Utility;
 import com.example.besher.materialtest.models.MyCLocation;
@@ -49,7 +50,6 @@ import java.util.List;
 public class AddMapFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener {
 
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private Button addLocation;
     private MapView mapView;
 
@@ -140,7 +140,7 @@ public class AddMapFragment extends Fragment implements View.OnClickListener, On
                 PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.
                         ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.PERMISSIONS_REQUEST_LOCATION);
         } else {
             setCurrentLocaiton();
         }
@@ -380,7 +380,7 @@ public class AddMapFragment extends Fragment implements View.OnClickListener, On
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_CONTACTS:
+            case Constant.PERMISSIONS_REQUEST_LOCATION:
                 if (Utility.permissionsGranted(grantResults)) {
                     setCurrentLocaiton();
                 }

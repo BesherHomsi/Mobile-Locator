@@ -66,9 +66,13 @@
 
         <!--This part is inside the application -->
         <receiver
-            android:name=".receiver.CallReceiver"
-            android:enabled="true"
-            android:exported="true">
+            android:name=".receiver.CallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
 
         </receiver>
     </application>

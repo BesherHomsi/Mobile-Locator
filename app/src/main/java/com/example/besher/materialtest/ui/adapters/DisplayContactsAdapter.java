@@ -66,7 +66,7 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
         public DisplayContactsHolder(View itemView) {
             super(itemView);
-
+            this.setIsRecyclable(false);
             setUpView(itemView);
 
             //itemView.setOnClickListener(this);
@@ -97,8 +97,11 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             switch (v.getId()) {
                 case R.id.chosenContact:
-                    //if(!mSavedContact.isChecked())
-                    contactListFragment.addMySavedContact(myContact);
+                    if(myContact.isCheckedContact()){
+                        contactListFragment.deleteSavedContact(myContact);
+                    } else {
+                        contactListFragment.addMySavedContact(myContact);
+                    }
                     break;
 
             }

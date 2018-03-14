@@ -1,8 +1,10 @@
 package com.example.besher.materialtest.ui.activity;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +17,7 @@ import com.example.besher.materialtest.ui.fragment.AddEventFragment;
 import com.example.besher.materialtest.ui.fragment.AddMapFragment;
 import com.example.besher.materialtest.ui.fragment.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public final static int FRAGMENT_MAIN = 0;
     public final static int FRAGMENT_CREATE_NEW_EVENT = 1;
     public final static int FRAGMENT_EDIT_EVENT = 2;
@@ -41,8 +43,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -135,6 +141,16 @@ public class MainActivity extends AppCompatActivity {
             default:
                 super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 /*
     public void addNewItem(SilenceItem silenceItem) {

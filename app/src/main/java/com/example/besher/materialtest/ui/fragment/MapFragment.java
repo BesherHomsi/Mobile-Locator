@@ -14,8 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.R;
+import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.helpers.MyLocationManager;
 import com.example.besher.materialtest.helpers.SilenceManager;
 import com.example.besher.materialtest.helpers.Utility;
@@ -33,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.security.Permission;
 import java.util.ArrayList;
 
 /**
@@ -41,7 +45,6 @@ import java.util.ArrayList;
 public class MapFragment extends Fragment implements View.OnClickListener, OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener, ItemEventTrigger.ItemEvent {
 
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     FloatingActionButton btnNewEventTrial;
     private SilenceItem silenceItem = null;
     private MapView mapView;
@@ -68,7 +71,9 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                 PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.
                         ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            String[] PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.PROCESS_OUTGOING_CALLS};
+            requestPermissions(PERMISSIONS, Constant.PERMISSIONS_REQUEST_ALL);
         } else {
             setCurrentLocaiton();
         }
@@ -230,9 +235,12 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_READ_CONTACTS:
+            case Constant.PERMISSIONS_REQUEST_ALL:
                 if (Utility.permissionsGranted(grantResults)) {
                     setCurrentLocaiton();
+                }
+                else {
+                    Toast.makeText(ControllerApplication.getInstance(), "Application will not work Correctly",Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

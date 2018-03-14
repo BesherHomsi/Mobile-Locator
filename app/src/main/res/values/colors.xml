@@ -6,6 +6,8 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="error">#b20000</color>
+    <color name="delete">#bd3820</color>
+    <color name="gray">#dcdcdc</color>
 
     <item name="visible" type="id"/>
     <item name="masked" type="id"/>

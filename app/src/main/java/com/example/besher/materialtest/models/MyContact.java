@@ -59,7 +59,7 @@ public class MyContact {
 
     public boolean isCheckedContact() {
 
-        if(status.equals("on"))
+        if(this.status.equals("on"))
             return true;
         return false;
     }

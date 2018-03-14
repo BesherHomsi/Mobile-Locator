@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Add"
         android:textColor="@color/white"
-        android:background="@drawable/deletebutton"/>
+        android:background="@drawable/addbutton"/>
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -38,6 +38,7 @@
             android:layout_marginLeft="50dp"
             android:hint="Search"
             android:drawableRight="@drawable/ic_action_search"
+            android:clickable="true"
             />
     </RelativeLayout>
 

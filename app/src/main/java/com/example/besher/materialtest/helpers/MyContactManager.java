@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.besher.materialtest.models.MyContact;
-import com.example.besher.materialtest.models.SilenceItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,9 +17,7 @@ import java.util.ArrayList;
 
 public class MyContactManager {
 
-
-    public final static String PREF_NAME = "MyContact";
-    public final static String KEY_CONTACTS_LIST = "myContact_list";
+    public final static String PREF_NAME = "my_contacts";
 
     public final static String KEY_ID = "id";
     public final static String KEY_NAME = "name";
@@ -71,7 +68,8 @@ public class MyContactManager {
         return new MyContact(id, name, number, status);
     }
 
-    public static void saveListToPref(Context context, ArrayList<MyContact> list) {
+    public static void saveListToPref(Context context, ArrayList<MyContact> list,
+                                      String KEY_CONTACTS_LIST) {
         JSONArray itemList = new JSONArray();
         JSONObject prefJson = new JSONObject();
 
@@ -94,7 +92,8 @@ public class MyContactManager {
         }
     }
 
-    public static ArrayList<MyContact> getListFromPref(Context context) {
+    public static ArrayList<MyContact> getListFromPref(Context context,
+                                                       String KEY_CONTACTS_LIST) {
         ArrayList<MyContact> list = new ArrayList<>();
 
         SharedPreferences prefs = context.getSharedPreferences(
@@ -117,7 +116,8 @@ public class MyContactManager {
         return list;
     }
 
-    public static boolean updateListPref(Context context, MyContact myContact) {
+    public static boolean updateListPref(Context context, MyContact myContact,
+                                         String KEY_CONTACTS_LIST) {
 
         SharedPreferences prefs = context.getSharedPreferences(
                 PREF_NAME, Context.MODE_PRIVATE);
@@ -145,22 +145,22 @@ public class MyContactManager {
         return false;
     }
 
-    /*
-    public static boolean deleteListPref(Context context, SilenceItem silenceItem) {
+    public static boolean deleteListPref(Context context, MyContact myContact,
+                                         String KEY_CONTACTS_LIST) {
 
         SharedPreferences prefs = context.getSharedPreferences(
                 PREF_NAME, Context.MODE_PRIVATE);
 
-        String prefListString = prefs.getString(KEY_ITEMS_LIST, "");
+        String prefListString = prefs.getString(KEY_CONTACTS_LIST, "");
 
         if (!prefListString.isEmpty()) {
             try {
                 JSONArray prefList = new JSONArray(prefListString);
                 for (int i = 0; i < prefList.length(); i++) {
-                    if (jsonObjectToItem(prefList.getJSONObject(i)).getId().equals(silenceItem.getId())) {
+                    if (jsonObjectToItem(prefList.getJSONObject(i)).getId().equals(myContact.getId())) {
                         prefList.remove(i);
                         SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString(KEY_ITEMS_LIST, prefList.toString());
+                        editor.putString(KEY_CONTACTS_LIST, prefList.toString());
                         editor.apply();
                         return true;
                     }
@@ -173,7 +173,7 @@ public class MyContactManager {
 
         return false;
     }
-    */
+
 
 
 }

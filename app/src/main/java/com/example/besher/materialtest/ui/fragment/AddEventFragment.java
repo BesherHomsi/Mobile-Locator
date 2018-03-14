@@ -47,11 +47,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private EditText mEndTime;
     private EditText mLocation;
     private Button mbtn_addEvent;
-    //private TextView mtv_displayDays;
-    //private TextView mSetStartDate;
-    //private TextView mSetEndDate;
-    //private TimePicker mTimePicker;
-    //private SilenceItemsAdapter mAdapter;
+    private Button mBtn_deleteEvent;
+    private Button mBtn_editEvent;
+
     private String title = "";
     private String daysSelected;
     private String[] daysList;
@@ -67,8 +65,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private TextInputLayout daysWrapper;
 
 
-
-    //Calendar Now = Calendar.getInstance();
     Calendar startDate = Calendar.getInstance();
     Calendar endDate = Calendar.getInstance();
 
@@ -131,20 +127,23 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
             mToolBar.setTitle("Add Event");
             ((AppCompatActivity) getActivity()).setSupportActionBar(mToolBar);
             mbtn_addEvent.setText("Add Event");
+            mBtn_deleteEvent.setVisibility(View.GONE);
+            mBtn_editEvent.setVisibility(View.GONE);
         } else {
             mToolBar.setTitle("Edit Event");
             ((AppCompatActivity) getActivity()).setSupportActionBar(mToolBar);
             setUpEditView();
             mbtn_addEvent.setText("Edit Event");
+            mbtn_addEvent.setVisibility(View.GONE);
 
         }
         mStartTime.setOnClickListener(this);
         mEndTime.setOnClickListener(this);
-        //mSetStartDate.setOnClickListener(this);
-        //mSetEndDate.setOnClickListener(this);
         mbtn_days.setOnClickListener(this);
         mbtn_addEvent.setOnClickListener(this);
         mLocation.setOnClickListener(this);
+        mBtn_editEvent.setOnClickListener(this);
+        mBtn_deleteEvent.setOnClickListener(this);
 
         return v;
     }
@@ -159,21 +158,18 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         mTitle = (EditText) view.findViewById(R.id.et_title);
         mbtn_days = (EditText) view.findViewById(R.id.btn_days);
         mbtn_addEvent = (Button) view.findViewById(R.id.btn_AddEvent);
-        //mSetStartDate = (TextView) view.findViewById(R.id.et_setStartDate);
-        //mSetEndDate = (TextView) view.findViewById(R.id.et_setEndDate);
-        //mTimePicker = (TimePicker) view.findViewById(R.id.timePicker);
+
         mStartTime = (EditText) view.findViewById(R.id.startTime);
         mEndTime = (EditText) view.findViewById(R.id.endTime);
         mLocation = (EditText) view.findViewById(R.id.location);
-
-        //mStartTimeLine = (View) view.findViewById(R.id.lineStartTime);
-        //mErorrTitle = (TextView) view.findViewById(R.id.error_title);
-        //mErorrHour = (TextView) view.findViewById(R.id.error_time);
 
         titleWrapper = (TextInputLayout) view.findViewById(R.id.titleWrapper);
         startTimeWrapper = (TextInputLayout) view.findViewById(R.id.startTimeWrapper);
         endTimeWrapper = (TextInputLayout) view.findViewById(R.id.endTimeWrapper);
         daysWrapper = (TextInputLayout) view.findViewById(R.id.daysWrapper);
+
+        mBtn_deleteEvent = (Button) view.findViewById(R.id.deleteButton);
+        mBtn_editEvent = (Button) view.findViewById(R.id.editButton);
     }
 
     public void setUpEditView() {
@@ -215,8 +211,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
                 mTitle.setText(this.title);
         }
 
-        this.daysSelected = this.silenceItem.getSelectedDays();
+
         if (silenceItem.getSelectedDays() != null) {
+            this.daysSelected = this.silenceItem.getSelectedDays();
             if (!silenceItem.getSelectedDays().isEmpty())
                 mbtn_days.setText(this.daysSelected);
         }
@@ -248,14 +245,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
                 if (silenceItem == null) {
                     if(isInputValid())
                         addItem(t);
-                    else{
+                    else {
                         break;
                     }
-                } else {
-                    if(isInputValid())
-                        editItem(t);
-                    else
-                        break;
                 }
                 break;
             case R.id.startTime:
@@ -266,6 +258,16 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.location:
                 getLocation();
+                break;
+            case R.id.editButton:
+                t = mTitle.getText().toString();
+                if(isInputValid())
+                    editItem(t);
+                break;
+            case R.id.deleteButton:
+                ItemEventTrigger.notifyListenerOnDelete(silenceItem);
+
+                getActivity().onBackPressed();
                 break;
             default:
                 break;
@@ -475,7 +477,6 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private void getLocation() {
         ((MainActivity) getContext()).addLocationToEvent();
     }
-
 
     public boolean isInputValid() {
 

@@ -21,6 +21,7 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.example.besher.materialtest.ControllerApplication;
+import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.ui.activity.MainActivity;
 
 import java.util.ArrayList;
@@ -46,7 +47,6 @@ public class DisplayContactDialog extends DialogFragment {
     private boolean[] checkedList;
     private List<String> selectedNames = new ArrayList<String>();
 
-    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
     public static DisplayContactDialog newInstance() {
 
@@ -62,7 +62,7 @@ public class DisplayContactDialog extends DialogFragment {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ControllerApplication.getInstance().
                 checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, Constant.PERMISSIONS_REQUEST_READ_CONTACTS);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
 
         }

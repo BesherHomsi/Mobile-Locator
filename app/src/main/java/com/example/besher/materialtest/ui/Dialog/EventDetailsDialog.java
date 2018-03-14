@@ -74,6 +74,7 @@ public class EventDetailsDialog extends DialogFragment {
 
         return dialog;
     }
+
     public void setUpView(View v){
 
         mStartTime = (TextView) v.findViewById(R.id.startTimeDetailsValue);

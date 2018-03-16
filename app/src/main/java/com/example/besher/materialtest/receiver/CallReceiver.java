@@ -3,6 +3,7 @@ package com.example.besher.materialtest.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.telecom.TelecomManager;
 import android.telephony.PhoneStateListener;
@@ -10,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import com.example.besher.materialtest.ControllerApplication;
+import com.example.besher.materialtest.helpers.LogManager;
 import com.example.besher.materialtest.helpers.MyContactManager;
 import com.example.besher.materialtest.helpers.SilenceManager;
 import com.example.besher.materialtest.models.MyContact;
@@ -56,11 +58,12 @@ public class CallReceiver extends BroadcastReceiver {
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING:
 
-                    if (numbers.contains(Number) || numbers.contains("00966"+Number) ||
-                            numbers.contains("+966"+Number)) {
+                    if (numbers.contains(Number)) {
                         // to make Ring state normal
-                        if(SilenceManager.checkIfEventISActiveWithLocation(ControllerApplication.getInstance()))
+                        if(SilenceManager.checkIfEventISActiveWithLocation(ControllerApplication.getInstance())) {
                             audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                            //LogManager.logAction("reved call and make niyt suiukhkjhkhlklkhgkgkjhk "+8+"");
+                        }
                     }
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:

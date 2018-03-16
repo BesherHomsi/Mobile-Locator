@@ -175,7 +175,6 @@ public class ContactListFragment extends Fragment {
                     s = s + phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract
                             .CommonDataKinds.Phone.NUMBER)) + ",";
                 }
-                s = s.replace(" ","");
                 String status = "off";
                 myContactsList.add(new MyContact(id, name, s, status));
             }

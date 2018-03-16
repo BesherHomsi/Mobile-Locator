@@ -11,6 +11,7 @@ import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.helpers.MyLocationManager;
 import com.example.besher.materialtest.helpers.SilenceManager;
+import com.example.besher.materialtest.helpers.Utility;
 import com.example.besher.materialtest.models.MyCLocation;
 import com.example.besher.materialtest.ui.Interfaces.ItemEventTrigger;
 
@@ -45,8 +46,10 @@ public class SilenceTask extends BroadcastReceiver {
         }
         switch (intent.getAction()) {
             case SilenceManager.ACTION_SET_SILENCE:
-                if (status.equals("off"))
+                if (status.equals("off")) {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    Utility.makeNotification(context, "The phone is in silent mode", null, null, "silent");
+                }
                 else {
                     //check if gps enabled
                     //if enabled user gps to get location;
@@ -59,6 +62,7 @@ public class SilenceTask extends BroadcastReceiver {
                         Location.distanceBetween(myCLocation.getLat(), myCLocation.getLng(), lat, lng, distance);
                         if (distance[0] <= Constant.RADUIES) {
                             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                            Utility.makeNotification(context, "The phone is in silent mode",null,null,"silent");
                         }
                     }
 
@@ -67,8 +71,10 @@ public class SilenceTask extends BroadcastReceiver {
             case SilenceManager.ACTION_REMOVE_SILENCE:
                 if (SilenceManager.checkIfEventISActiveWithLocation(context)) {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+
                 } else {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    Utility.makeNotification(context, "The phone is in normal mode",null,null,"normal");
                 }
                 break;
             case SilenceManager.ACTION_REMOVE_SILENCE_EVENT:

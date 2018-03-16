@@ -56,7 +56,8 @@ public class CallReceiver extends BroadcastReceiver {
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING:
 
-                    if (numbers.contains(Number)) {
+                    if (numbers.contains(Number) || numbers.contains("00966"+Number) ||
+                            numbers.contains("+966"+Number)) {
                         // to make Ring state normal
                         if(SilenceManager.checkIfEventISActiveWithLocation(ControllerApplication.getInstance()))
                             audiomanager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);

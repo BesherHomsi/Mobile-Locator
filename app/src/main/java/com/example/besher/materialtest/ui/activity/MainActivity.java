@@ -17,7 +17,7 @@ import com.example.besher.materialtest.ui.fragment.AddEventFragment;
 import com.example.besher.materialtest.ui.fragment.AddMapFragment;
 import com.example.besher.materialtest.ui.fragment.MainFragment;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity  {
     public final static int FRAGMENT_MAIN = 0;
     public final static int FRAGMENT_CREATE_NEW_EVENT = 1;
     public final static int FRAGMENT_EDIT_EVENT = 2;
@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(this);
-        return super.onCreateOptionsMenu(menu);
+
+
+        return true;
     }
 
 
@@ -54,10 +54,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.menu:
-                DisplayContactDialog daysDialog = DisplayContactDialog.newInstance();
-                daysDialog.show(getFragmentManager(), "any");
-                break;
             case R.id.menu1:
                 break;
             default:
@@ -143,15 +139,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
 /*
     public void addNewItem(SilenceItem silenceItem) {
         if(mMainFragment !=null){

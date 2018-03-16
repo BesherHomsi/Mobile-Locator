@@ -6,7 +6,14 @@
     tools:context="com.example.besher.materialtest.ui.fragment.ContactListFragment">
 
 
+    <SearchView
+        android:id="@+id/searchViewContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </SearchView>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/searchViewContacts"
         android:id="@+id/rv_myContacts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

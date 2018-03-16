@@ -67,23 +67,29 @@
         android:textColor="@color/black"
         />
 
+
     <TextView
-        android:id="@+id/locationDetails"
+        android:drawableStart="@drawable/ic_action_perm_contact_calendar"
+        android:id="@+id/endDateIcon"
+        android:layout_below="@+id/daysDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+
+    <TextView
+        android:id="@+id/endDateDialog"
         android:layout_below="@+id/daysDetailsList"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/endDateIcon"
         android:textSize="18sp"
         android:textColor="@color/black"/>
 
-    <TextView
-        android:id="@+id/locationDetails1"
-        android:layout_below="@+id/locationDetails"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/black"/>
 </RelativeLayout>

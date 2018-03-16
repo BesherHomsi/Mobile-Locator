@@ -12,6 +12,7 @@ import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.helpers.MyLocationManager;
 import com.example.besher.materialtest.helpers.SilenceManager;
 import com.example.besher.materialtest.models.MyCLocation;
+import com.example.besher.materialtest.ui.Interfaces.ItemEventTrigger;
 
 
 /**
@@ -47,9 +48,9 @@ public class SilenceTask extends BroadcastReceiver {
                 if (status.equals("off"))
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                 else {
-                    //check if gps enalbed
-                    //if enalbed user gps to get locaiton;
-                    //not enalbed use tower;
+                    //check if gps enabled
+                    //if enabled user gps to get location;
+                    //not enabled use tower;
                     myCLocation = MyLocationManager.getLocationViaTower(context);
 //                    if ((lng - Constant.RADUIES <= myCLocation.getLng() && myCLocation.getLng() <= lng + Constant.RADUIES) &&
 //                            (lat - Constant.RADUIES <= myCLocation.getLat() && myCLocation.getLat() <= lat + Constant.RADUIES))
@@ -69,6 +70,9 @@ public class SilenceTask extends BroadcastReceiver {
                 } else {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 }
+                break;
+            case SilenceManager.ACTION_REMOVE_SILENCE_EVENT:
+                ItemEventTrigger.notifyListenerOnEndDate();
                 break;
         }
     }

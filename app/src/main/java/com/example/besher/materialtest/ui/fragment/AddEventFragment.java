@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.DialogPreference;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.besher.materialtest.R;
@@ -41,14 +43,17 @@ import java.util.UUID;
  */
 public class AddEventFragment extends Fragment implements View.OnClickListener {
 
+    private final String ADDED_LOCATION = "Location has been added";
     private EditText mTitle;
     private EditText mbtn_days;
     private EditText mStartTime;
     private EditText mEndTime;
     private EditText mLocation;
+    private EditText mEndDate;
     private Button mbtn_addEvent;
     private Button mBtn_deleteEvent;
     private Button mBtn_editEvent;
+
 
     private String title = "";
     private String daysSelected;
@@ -63,10 +68,13 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     private TextInputLayout startTimeWrapper;
     private TextInputLayout endTimeWrapper;
     private TextInputLayout daysWrapper;
+    private TextInputLayout mEndDateWrapper;
 
 
     Calendar startDate = Calendar.getInstance();
     Calendar endDate = Calendar.getInstance();
+
+    private Boolean isDateSet = false;
 
     int hour, min;
 
@@ -108,7 +116,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         daysList = getResources().getStringArray(R.array.daysShortCut);
         checkedList = new boolean[daysList.length];
-        if ((Serializable) getArguments().getSerializable("item") != null) {
+        if (getArguments().getSerializable("item") != null) {
             this.silenceItem = (SilenceItem) getArguments().getSerializable("item");
         }
     }
@@ -142,6 +150,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         mbtn_days.setOnClickListener(this);
         mbtn_addEvent.setOnClickListener(this);
         mLocation.setOnClickListener(this);
+        mEndDate.setOnClickListener(this);
         mBtn_editEvent.setOnClickListener(this);
         mBtn_deleteEvent.setOnClickListener(this);
 
@@ -162,11 +171,13 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         mStartTime = (EditText) view.findViewById(R.id.startTime);
         mEndTime = (EditText) view.findViewById(R.id.endTime);
         mLocation = (EditText) view.findViewById(R.id.location);
+        mEndDate = (EditText) view.findViewById(R.id.endDate);
 
         titleWrapper = (TextInputLayout) view.findViewById(R.id.titleWrapper);
         startTimeWrapper = (TextInputLayout) view.findViewById(R.id.startTimeWrapper);
         endTimeWrapper = (TextInputLayout) view.findViewById(R.id.endTimeWrapper);
         daysWrapper = (TextInputLayout) view.findViewById(R.id.daysWrapper);
+        mEndDateWrapper = (TextInputLayout) view.findViewById(R.id.endDateWrapper);
 
         mBtn_deleteEvent = (Button) view.findViewById(R.id.deleteButton);
         mBtn_editEvent = (Button) view.findViewById(R.id.editButton);
@@ -224,9 +235,14 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         //mSetStartDate.setText(formatted);
 
         // Output "2012-09-26"
-        this.endDate.setTimeInMillis(this.silenceItem.getEndDate());
-        formatted = format1.format(this.startDate.getTime());
-        //mSetEndDate.setText(formatted);
+        if(this.endDate != null) {
+            if(this.silenceItem.getEndDate() != 0) {
+                this.endDate.setTimeInMillis(this.silenceItem.getEndDate());
+                formatted = format1.format(this.endDate.getTime());
+                mEndDate.setText(formatted);
+            }
+
+        }
     }
 
     public void displayDays(View view) {
@@ -259,6 +275,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
             case R.id.location:
                 getLocation();
                 break;
+            case R.id.endDate:
+                setEndDate();
+                break;
             case R.id.editButton:
                 t = mTitle.getText().toString();
                 if(isInputValid())
@@ -278,17 +297,31 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         String id = UUID.randomUUID().toString();
         String status = "on";
         if(eventLocation != null) {
-            ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
-                    startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
-                    start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
-                    eventLocation.getLat(), eventLocation.getLng(), "on"));
-
+            if(isDateSet) {
+                ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
+                        startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
+                        start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
+                        eventLocation.getLat(), eventLocation.getLng(), "on"));
+            } else {
+                ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
+                        startDate.getTimeInMillis(), 0, startHour, startMin,
+                        start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
+                        eventLocation.getLat(), eventLocation.getLng(), "on"));
+            }
         }
         else {
-            ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
-                    startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
-                    start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
-                    0.0, 0.0, "off"));
+            if(isDateSet) {
+                ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
+                        startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
+                        start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
+                        0.0, 0.0, "off"));
+            } else {
+                ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
+                        startDate.getTimeInMillis(), 0, startHour, startMin,
+                        start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
+                        0.0, 0.0, "off"));
+            }
+
         }
 
         //method()
@@ -321,7 +354,8 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     //In order to display the days in a list and choose from them
     public void displayDaysList() {
         final HashMap<Integer, String> daysMap = Days.getDays();
-        AlertDialog.Builder builder = new AlertDialog.Builder((MainActivity) getActivity());
+        mbtn_days.setText(" ");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Days");
         builder.setMultiChoiceItems(R.array.days, checkedList,
                 new DialogInterface.OnMultiChoiceClickListener() {
@@ -349,7 +383,7 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                daysString=" ";
                 for (int i = 0; i < days.size(); i++) {
                     daysString = daysString + days.get(i) + " ";
                 }
@@ -384,15 +418,31 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                //mSetEndDate.setText(dayOfMonth + "-" + month + "-" + year);
+                int monthOfYear = month+1;
+                mEndDate.setText(dayOfMonth + "-" + monthOfYear + "-" + year);
                 endDate.set(year, month, dayOfMonth);
-
+                isDateSet = true;
             }
         };
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), listener,
                 Now.get(Calendar.YEAR), Now.get(Calendar.MONTH), Now.get(Calendar.DAY_OF_MONTH));
 
 
+        DialogInterface.OnClickListener clickListener = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        mEndDate.setText(" ");
+                        isDateSet = false;
+                        break;
+                }
+            }
+        };
+
+        datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Clear", clickListener);
         datePickerDialog.show();
     }
 
@@ -509,11 +559,18 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
             daysWrapper.setErrorEnabled(false);
         }
 
-        if(ErorrHandler.startHourGreater(this.startHour, this.endHour, this.start_AM_PM, this.end_AM_PM)) {
+        if (ErorrHandler.startHourGreater(this.startHour, this.endHour, this.start_AM_PM, this.end_AM_PM)) {
             startTimeWrapper.setError("Start time is less than end tine");
             return false;
         }else {
-            daysWrapper.setErrorEnabled(false);
+            startTimeWrapper.setErrorEnabled(false);
+        }
+
+        if (ErorrHandler.endDateCheck(this.endDate.getTimeInMillis()) && isDateSet) {
+            mEndDateWrapper.setError("End date is Today!");
+            return false;
+        }else{
+            mEndDateWrapper.setErrorEnabled(false);
         }
 
         return true;
@@ -522,8 +579,9 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
     public void setEventLocation(MyCLocation eventLocation) {
 
         this.eventLocation = eventLocation;
-        //String s = "Location has been added";
-        //mLocation.setText(s);
+        if(eventLocation != null) {
+            mLocation.setText(this.ADDED_LOCATION);
+        }
 
 
     }

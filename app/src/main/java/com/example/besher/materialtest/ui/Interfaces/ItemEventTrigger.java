@@ -43,10 +43,20 @@ public class ItemEventTrigger {
         }
     }
 
+    public static void notifyListenerOnEndDate() {
+        for (ItemEvent ls:
+                listeners) {
+            ls.onDeleteEndDate();
+
+        }
+
+    }
+
     public interface ItemEvent {
         void onNewItem(SilenceItem silenceItem);
         void onUpdateItem(SilenceItem silenceItem);
         void onDeleteItem(SilenceItem silenceItem);
+        void onDeleteEndDate();
     }
 
 }

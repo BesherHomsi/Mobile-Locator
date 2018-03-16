@@ -25,14 +25,16 @@ import java.util.Calendar;
  */
 public class EventDetailsDialog extends DialogFragment {
 
-    //private TextView mStartDate;
-    //private TextView mEndDate;
+
     private TextView mStartTime;
     private TextView mEndTime;
     private TextView mDays;
-    private TextView mLocation;
-    private TextView mLocation1;
+    private TextView mEndDate;
+    private TextView mEndDateIcon;
+
     private SilenceItem silenceItem;
+
+
 
     public static EventDetailsDialog newInstance(SilenceItem silenceItem) {
 
@@ -44,7 +46,7 @@ public class EventDetailsDialog extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View v = inflater.inflate(R.layout.dialog_event_details, null);
@@ -75,17 +77,21 @@ public class EventDetailsDialog extends DialogFragment {
         return dialog;
     }
 
-    public void setUpView(View v){
+    public void setUpView(View v) {
 
         mStartTime = (TextView) v.findViewById(R.id.startTimeDetailsValue);
         mEndTime = (TextView) v.findViewById(R.id.endTimeDetailsValue);
         mDays = (TextView) v.findViewById(R.id.daysDetailsList);
-        mLocation = (TextView) v.findViewById(R.id.locationDetails);
-        mLocation1 = (TextView) v.findViewById(R.id.locationDetails1);
+        mEndDate = (TextView) v.findViewById(R.id.endDateDialog);
+        mEndDateIcon = (TextView) v.findViewById(R.id.endDateIcon);
+
+
     }
 
     public void displayDetails() {
 
+        SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+        String formatted;
 
         mStartTime.setText(setTime(this.silenceItem.getStartHour(),this.silenceItem.getStartMin(),
                 this.silenceItem.getStart_AM_PM()));
@@ -95,9 +101,16 @@ public class EventDetailsDialog extends DialogFragment {
 
         mDays.setText(this.silenceItem.getSelectedDays());
 
-        mLocation.setText(String.valueOf(this.silenceItem.getLat()));
 
-        mLocation1.setText(String.valueOf(this.silenceItem.getLat()));
+        Calendar endDate = Calendar.getInstance();
+        if( this.silenceItem.getEndDate() != 0 ) {
+            endDate.setTimeInMillis(this.silenceItem.getEndDate());
+            formatted = format1.format(endDate.getTime());
+            mEndDate.setText(formatted);
+        }
+        else{
+            mEndDateIcon.setVisibility(View.GONE);
+        }
     }
 
     public String setTime(int hour,int min,String AM_PM) {

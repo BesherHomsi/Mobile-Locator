@@ -40,5 +40,20 @@ public class ErorrHandler {
                 return true;
         return false;
     }
+
+    public static boolean endDateCheck(long endDate) {
+
+        Calendar now = Calendar.getInstance();
+        Calendar myCalendarEndDate = Calendar.getInstance();
+
+        myCalendarEndDate.setTimeInMillis(endDate);
+
+        if( myCalendarEndDate.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                myCalendarEndDate.get(Calendar.MONTH)== now.get(Calendar.MONTH) &&
+                myCalendarEndDate.get(Calendar.DAY_OF_WEEK) == now.get(Calendar.DAY_OF_WEEK)){
+            return true;
+        }
+        return false;
+    }
 }
 

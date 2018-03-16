@@ -53,6 +53,8 @@ public class SilenceManager {
 
     public final static String ACTION_SET_SILENCE = "set_silence";
     public final static String ACTION_REMOVE_SILENCE = "remove_silence";
+    public final static String ACTION_REMOVE_SILENCE_EVENT = "remove_silence_event";
+
 
     //public final static String PREF_NAME_PENDING = "pendingItem";
     //public final static String KEY_PENDING_ITEM = "pending_item";
@@ -148,6 +150,30 @@ public class SilenceManager {
                 .getSystemService(context.ALARM_SERVICE);
 
         alarmRemove.setRepeating(AlarmManager.RTC_WAKEUP, removeCalender.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pIntentRemove);
+
+
+        Calendar endDateCalender = Calendar.getInstance();
+        endDateCalender.setTimeInMillis(silenceItem.getEndDate());
+
+        Bundle bundle2 = new Bundle();
+        bundle.putString("item", silenceItem.getLocationStatus() + ":" + silenceItem.getLat() + ":"
+                + silenceItem.getLng());
+
+        id = getNewID(context);
+        silenceItem.addNewAlarmID(String.valueOf(id));
+
+        Intent intentRemoveEvent = new Intent(context, SilenceTask.class);
+        intentRemoveEvent.setAction(ACTION_REMOVE_SILENCE_EVENT);
+        intentRemove.putExtras(bundle2);
+        PendingIntent pIntentRemoveEvent = PendingIntent.getBroadcast(context,
+                id, intentRemoveEvent, 0);
+
+        AlarmManager alarmRemoveEvent = (AlarmManager) context
+                .getSystemService(context.ALARM_SERVICE);
+
+        alarmRemoveEvent.setRepeating(AlarmManager.RTC_WAKEUP, endDateCalender.getTimeInMillis(),
+                AlarmManager.INTERVAL_FIFTEEN_MINUTES, pIntentRemoveEvent);
+
     }
 
     public static void cancelAlarm(Context context, SilenceItem silenceItem) {
@@ -214,26 +240,40 @@ public class SilenceManager {
 
         Calendar now = Calendar.getInstance();
         int currentHour = now.get(Calendar.HOUR_OF_DAY);
+        int currentMin = now.get(Calendar.MINUTE);
         ArrayList<SilenceItem> events = SilenceManager.getListFromPref(context);
         MyCLocation myCLocation = MyLocationManager.getLocationViaTower(context);
         boolean found = false;
         if (myCLocation != null) {
             for (int i = 0; i < events.size(); i++) {
                 SilenceItem event = events.get(i);
-                if (event.getLocationStatus().equals("on") && event.isSet() &&
-                        (event.getStartHour() <= currentHour) && (event.getEndHour() >= currentHour)) {
-                    float[] distance = new float[2];
-                    Location.distanceBetween(myCLocation.getLat(), myCLocation.getLng(), events.get(i).getLat(), events.get(i).getLng(), distance);
-                    if (distance[0] <= Constant.RADUIES) {
-                        found = true;
-                        break;
+                if (event.getLocationStatus().equals("on") && event.isSet()) {
+                    if (event.getStartHour() == event.getEndHour()) {
+                        if ((event.getStartMin() <= currentMin) && (event.getEndMin() >= currentMin)) {
+                            float[] distance = new float[2];
+                            Location.distanceBetween(myCLocation.getLat(), myCLocation.getLng(),
+                                    events.get(i).getLat(), events.get(i).getLng(), distance);
+                            if (distance[0] <= Constant.RADUIES) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    } else {
+                        if ((event.getStartHour() <= currentHour) && (event.getEndHour() >= currentHour)) {
+                            float[] distance = new float[2];
+                            Location.distanceBetween(myCLocation.getLat(), myCLocation.getLng(),
+                                    events.get(i).getLat(), events.get(i).getLng(), distance);
+                            if (distance[0] <= Constant.RADUIES) {
+                                found = true;
+                                break;
+                            }
+                        }
                     }
                 }
             }
         }
 
         return found;
-
     }
 
     private static JSONObject itemToJsonObject(SilenceItem silenceItem) {

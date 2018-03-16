@@ -21,6 +21,7 @@ import com.example.besher.materialtest.ui.activity.MainActivity;
 import com.example.besher.materialtest.ui.adapters.SilenceItemsAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -134,10 +135,33 @@ public class SilenceItemsListFragment extends Fragment implements View.OnClickLi
         SilenceManager.deleteListPref(ControllerApplication.getInstance(), silenceItem);
         SilenceManager.cancelAlarm(ControllerApplication.getInstance(), silenceItem);
         for (int i = 0; i < mSilenceItemList.size(); i++) {
-            if (mSilenceItemList.get(i).getId() == silenceItem.getId()   ) {
+            if (mSilenceItemList.get(i).getId().equals(silenceItem.getId())) {
                 mSilenceItemList.remove(i);
                 mAdapter.setData(mSilenceItemList);
                 break;
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteEndDate() {
+
+        SilenceItem deleteItem;
+        Calendar now = Calendar.getInstance();
+        Calendar myEventEndDate = Calendar.getInstance();
+
+
+
+        for (int i = 0; i < mSilenceItemList.size(); i++) {
+            myEventEndDate.setTimeInMillis(mSilenceItemList.get(i).getEndDate());
+            if( myEventEndDate.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                    myEventEndDate.get(Calendar.MONTH)== now.get(Calendar.MONTH) &&
+                    myEventEndDate.get(Calendar.DAY_OF_WEEK) == now.get(Calendar.DAY_OF_WEEK)) {
+                deleteItem = mSilenceItemList.get(i);
+                mSilenceItemList.remove(deleteItem);
+                mAdapter.setData(mSilenceItemList);
+                SilenceManager.deleteListPref(ControllerApplication.getInstance(), deleteItem);
+                SilenceManager.cancelAlarm(ControllerApplication.getInstance(), deleteItem);
             }
         }
     }
@@ -157,7 +181,9 @@ public class SilenceItemsListFragment extends Fragment implements View.OnClickLi
         SilenceManager.cancelAlarm(ControllerApplication.getInstance(),silenceItem);
     }
 
-  /*  public void editEvent(SilenceItem silenceItem) {
+
+
+    /*  public void editEvent(SilenceItem silenceItem) {
         ((MainActivity) getContext()).addNewEvent(silenceItem);
     }*/
 

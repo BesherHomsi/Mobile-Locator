@@ -211,7 +211,7 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
                     item.getLng() == marker.getPosition().longitude) {
                 EventDetailsDialog daysDialog = EventDetailsDialog.newInstance(item);
                 daysDialog.show(getFragmentManager(), "any");
-                silenceItemList.remove(item);
+                //silenceItemList.remove(item);
             }
         }
     }
@@ -264,4 +264,8 @@ public class MapFragment extends Fragment implements View.OnClickListener, OnMap
         }
     }
 
+    @Override
+    public void onDeleteEndDate() {
+
+    }
 }

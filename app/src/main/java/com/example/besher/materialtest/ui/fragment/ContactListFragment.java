@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class ContactListFragment extends Fragment {
 
     private DisplayContactsAdapter displayContactsAdapter;
     private RecyclerView rv_contactList;
+    private android.widget.SearchView searchView;
     View root;
 
 
@@ -77,6 +79,19 @@ public class ContactListFragment extends Fragment {
             setUpView(root);
             displayContactsAdapter = new DisplayContactsAdapter(myContactsList, this);
             rv_contactList.setAdapter(displayContactsAdapter);
+
+            searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    displayContactsAdapter.filter(newText);
+                    return false;
+                }
+            });
         }
         return root;
     }
@@ -129,11 +144,11 @@ public class ContactListFragment extends Fragment {
         getContactTask.execute();
     }
 
-
     public void setUpView(View v) {
 
         rv_contactList = (RecyclerView) v.findViewById(R.id.rv_myContacts);
         rv_contactList.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchView = (SearchView) v.findViewById(R.id.searchViewContacts);
 
     }
 
@@ -159,8 +174,8 @@ public class ContactListFragment extends Fragment {
                     //this.phoneNumber.add();
                     s = s + phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract
                             .CommonDataKinds.Phone.NUMBER)) + ",";
-
                 }
+                s = s.replace(" ","");
                 String status = "off";
                 myContactsList.add(new MyContact(id, name, s, status));
             }

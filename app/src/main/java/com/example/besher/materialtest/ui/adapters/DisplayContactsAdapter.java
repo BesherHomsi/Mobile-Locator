@@ -24,12 +24,14 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     ArrayList<MyContact> mValues = new ArrayList<>();
     ContactListFragment contactListFragment;
-
+    ArrayList<MyContact> itemsCopy = new ArrayList<>();
 
     public DisplayContactsAdapter(ArrayList<MyContact> mValues,ContactListFragment contactListFragment ) {
 
         this.mValues = mValues;
         this.contactListFragment = contactListFragment;
+
+        itemsCopy.addAll(mValues);
     }
 
     public void setData(ArrayList<MyContact> data) {
@@ -57,12 +59,29 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         return mValues.size();
     }
 
+    public void filter(String text) {
+        itemsCopy.addAll(mValues);
+        mValues.clear();
+        if(text.isEmpty()){
+            mValues.addAll(itemsCopy);
+        } else{
+            text = text.toLowerCase();
+            for(MyContact item: itemsCopy){
+                if(item.getName().toLowerCase().contains(text)){
+                    mValues.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     class DisplayContactsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         MyContact myContact;
         TextView mContactName;
-        TextView mContactPhoneNumber;
         CheckBox mSavedContact;
+
+
 
         public DisplayContactsHolder(View itemView) {
             super(itemView);
@@ -71,12 +90,12 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             //itemView.setOnClickListener(this);
             mSavedContact.setOnClickListener(this);
+
         }
 
         public void setUpView(View itemView) {
 
             mContactName = (TextView) itemView.findViewById(R.id.contactName);
-            mContactPhoneNumber = (TextView) itemView.findViewById(R.id.contactNumber);
             mSavedContact = (CheckBox) itemView.findViewById(R.id.chosenContact);
 
         }
@@ -85,7 +104,6 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             this.myContact = myContact;
             mContactName.setText(myContact.getName());
-            mContactPhoneNumber.setText(myContact.getNumber().toString());
 
             if(myContact.isCheckedContact())
                 mSavedContact.setChecked(true);
@@ -106,5 +124,7 @@ public class DisplayContactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             }
         }
+
+
     }
 }

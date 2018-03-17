@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.R;
+import com.example.besher.materialtest.helpers.LogManager;
 import com.example.besher.materialtest.models.SilenceItem;
 import com.example.besher.materialtest.helpers.SilenceManager;
 import com.example.besher.materialtest.ui.Dialog.EventDetailsDialog;
@@ -134,6 +135,7 @@ public class SilenceItemsListFragment extends Fragment implements View.OnClickLi
 
         SilenceManager.deleteListPref(ControllerApplication.getInstance(), silenceItem);
         SilenceManager.cancelAlarm(ControllerApplication.getInstance(), silenceItem);
+        LogManager.logAction(silenceItem.getTitle()+" deleted");
         for (int i = 0; i < mSilenceItemList.size(); i++) {
             if (mSilenceItemList.get(i).getId().equals(silenceItem.getId())) {
                 mSilenceItemList.remove(i);
@@ -158,6 +160,7 @@ public class SilenceItemsListFragment extends Fragment implements View.OnClickLi
                     myEventEndDate.get(Calendar.MONTH)== now.get(Calendar.MONTH) &&
                     myEventEndDate.get(Calendar.DAY_OF_WEEK) == now.get(Calendar.DAY_OF_WEEK)) {
                 deleteItem = mSilenceItemList.get(i);
+                LogManager.logAction(deleteItem.getTitle()+" date has ended");
                 mSilenceItemList.remove(deleteItem);
                 mAdapter.setData(mSilenceItemList);
                 SilenceManager.deleteListPref(ControllerApplication.getInstance(), deleteItem);

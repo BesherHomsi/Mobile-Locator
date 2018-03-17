@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.example.besher.materialtest.R;
 import com.example.besher.materialtest.models.MyContact;
 import com.example.besher.materialtest.models.SilenceItem;
-import com.example.besher.materialtest.ui.Dialog.DisplayContactDialog;
 import com.example.besher.materialtest.ui.fragment.ContactListFragment;
 
 import java.util.ArrayList;

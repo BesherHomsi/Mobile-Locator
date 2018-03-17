@@ -1,6 +1,8 @@
 package com.example.besher.materialtest;
 
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 
 import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.services.MapTask;
@@ -16,6 +18,7 @@ import com.google.android.gms.gcm.PeriodicTask;
 public class ControllerApplication extends Application {
 
     private static ControllerApplication instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,4 +43,18 @@ public class ControllerApplication extends Application {
     public static ControllerApplication getInstance() {
         return instance;
     }
+
+    public static String getVersionName() {
+        final PackageManager pckManager = getInstance().getPackageManager();
+
+        PackageInfo infoApp = null;
+        try {
+            infoApp = pckManager.getPackageInfo(getInstance().getPackageName(), 0);
+            return infoApp.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 }

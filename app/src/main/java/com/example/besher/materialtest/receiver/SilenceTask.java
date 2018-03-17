@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.example.besher.materialtest.ControllerApplication;
 import com.example.besher.materialtest.helpers.Constant;
+import com.example.besher.materialtest.helpers.LogManager;
 import com.example.besher.materialtest.helpers.MyLocationManager;
 import com.example.besher.materialtest.helpers.SilenceManager;
 import com.example.besher.materialtest.helpers.Utility;
@@ -49,6 +50,7 @@ public class SilenceTask extends BroadcastReceiver {
                 if (status.equals("off")) {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                     Utility.makeNotification(context, "The phone is in silent mode", null, null, "silent");
+                    LogManager.logAction("The phone is silent");
                 }
                 else {
                     //check if gps enabled
@@ -63,6 +65,7 @@ public class SilenceTask extends BroadcastReceiver {
                         if (distance[0] <= Constant.RADUIES) {
                             audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                             Utility.makeNotification(context, "The phone is in silent mode",null,null,"silent");
+                            LogManager.logAction("The phone is silent");
                         }
                     }
 
@@ -75,6 +78,7 @@ public class SilenceTask extends BroadcastReceiver {
                 } else {
                     audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     Utility.makeNotification(context, "The phone is in normal mode",null,null,"normal");
+                    LogManager.logAction("The phone is normal");
                 }
                 break;
             case SilenceManager.ACTION_REMOVE_SILENCE_EVENT:

@@ -25,7 +25,6 @@ import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.helpers.MyContactManager;
 import com.example.besher.materialtest.helpers.Utility;
 import com.example.besher.materialtest.models.MyContact;
-import com.example.besher.materialtest.ui.Dialog.DisplayContactDialog;
 import com.example.besher.materialtest.ui.adapters.DisplayContactsAdapter;
 
 import java.util.ArrayList;

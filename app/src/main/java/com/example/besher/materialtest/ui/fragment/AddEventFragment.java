@@ -25,6 +25,7 @@ import android.widget.TimePicker;
 
 import com.example.besher.materialtest.R;
 import com.example.besher.materialtest.helpers.ErorrHandler;
+import com.example.besher.materialtest.helpers.LogManager;
 import com.example.besher.materialtest.models.Days;
 import com.example.besher.materialtest.models.MyCLocation;
 import com.example.besher.materialtest.models.SilenceItem;
@@ -302,11 +303,13 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
                         startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
                         start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
                         eventLocation.getLat(), eventLocation.getLng(), "on"));
+                LogManager.logAction(title+" Added");
             } else {
                 ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
                         startDate.getTimeInMillis(), 0, startHour, startMin,
                         start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
                         eventLocation.getLat(), eventLocation.getLng(), "on"));
+                LogManager.logAction(title+" Added");
             }
         }
         else {
@@ -315,11 +318,13 @@ public class AddEventFragment extends Fragment implements View.OnClickListener {
                         startDate.getTimeInMillis(), endDate.getTimeInMillis(), startHour, startMin,
                         start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
                         0.0, 0.0, "off"));
+                LogManager.logAction(title+" Added");
             } else {
                 ItemEventTrigger.notifyListenerOnNewItem(new SilenceItem(id, title, daysString,
                         startDate.getTimeInMillis(), 0, startHour, startMin,
                         start_AM_PM, endHour, endMin, end_AM_PM, alarmIDS, status,
                         0.0, 0.0, "off"));
+                LogManager.logAction(title+" Added");
             }
 
         }

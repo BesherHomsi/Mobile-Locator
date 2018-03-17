@@ -1,57 +1,31 @@
 package com.example.besher.materialtest.ui.Dialog;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.util.Log;
 
 import com.example.besher.materialtest.ControllerApplication;
-import com.example.besher.materialtest.helpers.Constant;
 import com.example.besher.materialtest.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DisplayContactDialog extends DialogFragment {
+public class AboutDialog extends DialogFragment {
 
 
 
-
-    private List<String> phoneNumber = new ArrayList<String>();
-    private List<String> contactName = new ArrayList<String>();
-    private String[] namesStrings;
-    private HashMap<String,List<String>> contact = new HashMap<>();
-
-
-
-    private boolean[] checkedList;
-    private List<String> selectedNames = new ArrayList<String>();
-
-
-    public static DisplayContactDialog newInstance() {
+    public static AboutDialog newInstance() {
 
         Bundle args = new Bundle();
-        DisplayContactDialog fragment = new DisplayContactDialog();
+        AboutDialog fragment = new AboutDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,35 +34,9 @@ public class DisplayContactDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ControllerApplication.getInstance().
-                checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, Constant.PERMISSIONS_REQUEST_READ_CONTACTS);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-
-        }
-        else
-            retrieveContacts();
-        String[] phones = new String[phoneNumber.size()];
-        phones = phoneNumber.toArray(phones);
-
-        String[] names = new String[contactName.size()];
-        names = contactName.toArray(names);
-        namesStrings = names;
         AlertDialog.Builder builder = new AlertDialog.Builder((MainActivity)getActivity());
-        builder.setTitle("Contact");
-        builder.setMultiChoiceItems(names, checkedList,
-                new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                if (isChecked) {
-                    if (!selectedNames.contains(namesStrings[which])) {
-                        selectedNames.add(namesStrings[which]);
-                    }
-                } else {
-                    selectedNames.remove(namesStrings[which]);
-                }
-            }
-        });
+        builder.setTitle("About");
+        builder.setMessage("Version: "+ControllerApplication.getVersionName());
 
         builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
             @Override
@@ -97,11 +45,10 @@ public class DisplayContactDialog extends DialogFragment {
             }
         });
 
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //((MainActivity) getContext()).addNewEvent(silenceItem);
-                getSelectedName();
 
             }
         });
@@ -110,6 +57,8 @@ public class DisplayContactDialog extends DialogFragment {
         return dialog;
     }
 
+
+/*
     public void retrieveContacts() {
         List<String> phoneNumbers;
         int i= 0;
@@ -152,5 +101,6 @@ public class DisplayContactDialog extends DialogFragment {
 
     }
 
+*/
 }
 

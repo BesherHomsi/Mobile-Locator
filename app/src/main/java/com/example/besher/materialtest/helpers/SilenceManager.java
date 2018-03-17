@@ -190,7 +190,7 @@ public class SilenceManager {
                 AlarmManager alarmManager = (AlarmManager) context
                         .getSystemService(context.ALARM_SERVICE);
                 alarmManager.cancel(pendingIntent);
-
+                LogManager.logAction(silenceItem.getTitle()+" canceled "+s);
             } catch (NumberFormatException e) {
             }
             if (s.equals(ACTION_SET_SILENCE))

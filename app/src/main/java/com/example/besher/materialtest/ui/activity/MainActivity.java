@@ -12,18 +12,20 @@ import android.view.MenuItem;
 import com.example.besher.materialtest.R;
 import com.example.besher.materialtest.models.MyCLocation;
 import com.example.besher.materialtest.models.SilenceItem;
-import com.example.besher.materialtest.ui.Dialog.DisplayContactDialog;
+import com.example.besher.materialtest.ui.Dialog.AboutDialog;
 import com.example.besher.materialtest.ui.fragment.AddEventFragment;
 import com.example.besher.materialtest.ui.fragment.AddMapFragment;
+import com.example.besher.materialtest.ui.fragment.LogsListFragment;
 import com.example.besher.materialtest.ui.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity  {
+
     public final static int FRAGMENT_MAIN = 0;
     public final static int FRAGMENT_CREATE_NEW_EVENT = 1;
     public final static int FRAGMENT_EDIT_EVENT = 2;
     public final static int FRAGMENT_EVENT_DETAILS = 3;
     public final static int FRAGMENT_ADD_LOCATION = 4;
-
+    public final static int FRAGMENT_LOG = 5;
 
     private MainFragment mMainFragment;
     private AddEventFragment mAddAnEvent;
@@ -55,7 +57,12 @@ public class MainActivity extends AppCompatActivity  {
 
         switch (item.getItemId()) {
             case R.id.menu1:
+                AboutDialog daysDialog = AboutDialog.newInstance();
+                daysDialog.show(getFragmentManager(),"about");
                 break;
+            case R.id.logMenu:
+                currentFragment = FRAGMENT_LOG;
+                setFragment(new LogsListFragment());
             default:
                 break;
         }
@@ -68,7 +75,6 @@ public class MainActivity extends AppCompatActivity  {
             mMainFragment = MainFragment.newInstance();
         setFragment(mMainFragment);
     }
-
 
     public void addNewEvent(SilenceItem silenceItem) {
         currentFragment = FRAGMENT_CREATE_NEW_EVENT;
@@ -132,6 +138,9 @@ public class MainActivity extends AppCompatActivity  {
                 break;
             case FRAGMENT_ADD_LOCATION:
                 returnToAddEvent(null);
+                break;
+            case FRAGMENT_LOG:
+                pagerFragment();
                 break;
             case FRAGMENT_MAIN:
             default:
